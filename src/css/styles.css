@@ -32,7 +32,6 @@ img {
   width: 1200px;
 }
 
-/* Search Field */
 .header {
   display: flex;
   justify-content: center;
@@ -47,7 +46,6 @@ img {
   outline: none;
 }
 
-/* Gallery */
 .gallery {
   display: flex;
   flex-wrap: wrap;

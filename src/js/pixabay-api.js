@@ -5,7 +5,7 @@ export const options = {
   params: {
     key: API_KEY,
     q: '',
-    image_type: '',
+    image_type: 'photo',
     orientation: 'horizontal',
     safesearch: true,
     page: 1,

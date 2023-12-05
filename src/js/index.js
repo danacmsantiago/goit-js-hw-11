@@ -28,31 +28,36 @@ function renderGallery(hits) {
         comments,
         downloads,
       }) => {
-        return `<a href="${largeImageURL}" class="lightbox">
-      <div class="photo-card">
-      <img src="${webformatURL}" alt="${tags}" loading="lazy">
-      <div class="info">
-      <p class="info-item"><b>Likes</b>${likes}</p>
-      <p class="info-item"><b>Views</b>${views}</p>
-      <p class="info-item"><b>Comments</b>${comments}</p>
-      <p class="info-item"><b>Downloads</b>${downloads}</p>
-      </div>
-      </div>
-      </a>`;
+        return `
+              <a href="${largeImageURL}" class="lightbox">
+                  <div class="photo-card">
+                      <img src="${webformatURL}" alt="${tags}" loading="lazy" />
+                      <div class="info">
+                          <p class="info-item">
+                              <b>Likes</b>
+                              ${likes}
+                          </p>
+                          <p class="info-item">
+                              <b>Views</b>
+                              ${views}
+                          </p>
+                          <p class="info-item">
+                              <b>Comments</b>
+                              ${comments}
+                          </p>
+                          <p class="info-item">
+                              <b>Downloads</b>
+                              ${downloads}
+                          </p>
+                      </div>
+                  </div>
+              </a>
+              `;
       }
     )
     .join('');
 
   galleryEl.insertAdjacentHTML('beforeend', markup);
-
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
-
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
 
   if (options.params.page * options.params.per_page >= totalHits) {
     if (!reachedEnd) {
@@ -97,20 +102,22 @@ async function handleSubmit(e) {
 searchFormEl.addEventListener('submit', handleSubmit);
 
 async function loadMore() {
-  options.params.page += 1;
-  try {
-    const response = await axios.get(BASE_URL, options);
-    const hits = response.data.hits;
-    renderGallery(hits);
-  } catch (err) {
-    Notify.failure(err);
+  if (options.params.page * options.params.per_page < totalHits) {
+    options.params.page += 1;
+    try {
+      const response = await axios.get(BASE_URL, options);
+      const hits = response.data.hits;
+      renderGallery(hits);
+    } catch (err) {
+      Notify.failure(err);
+    }
   }
 }
 
 function handleScroll() {
   const { scrollTop, scrollHeight, clientHeight } = document.documentElement;
 
-  if (scrollTop + clientHeight >= scrollHeight) {
+  if (scrollTop + clientHeight >= scrollHeight - 200) {
     loadMore();
   }
 }
